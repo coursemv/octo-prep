@@ -1,0 +1,93 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PM Interview Prep Bot - Landing Page</title>
+    <!-- Chosen Palette: "Soothing Sage & Sand" -->
+    <!-- Application Structure Plan: This is a single-page landing site with a clear, linear flow designed to convert visitors. It starts with a prominent hero section (Problem + Promise + CTA) to immediately capture attention and convey value. This is followed by a social proof section (Testimonials) to build trust. The structure is optimized for quick information consumption and conversion, avoiding complex navigation or multiple pages. -->
+    <!-- Visualization & Content Choices: 
+        - Problem/Promise: Report Info -> Challenges of AI PM interviews, benefits of tailored prep. Goal -> Inform/Persuade. Presentation -> Concise text blocks. Interaction -> None (direct messaging). Justification -> Clearly articulates the pain point and solution upfront. Method -> HTML/CSS.
+        - Testimonials: Report Info -> Social proof. Goal -> Build Trust. Presentation -> Card-style blocks with seeded quotes. Interaction -> None. Justification -> Real-world (simulated) validation of the bot's effectiveness. Method -> HTML/CSS.
+        - CTA: Report Info -> Call to action. Goal -> Convert. Presentation -> Prominent button. Interaction -> Click to initiate purchase/sign-up. Justification -> Drives user to the next step. Method -> HTML/CSS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* Warm Sand */
+            color: #333D29; /* Dark Olive */
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .btn-cta {
+            @apply bg-[#656D4A] text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:bg-[#3A5A40] transition-all duration-300 transform hover:scale-105;
+        }
+    </style>
+</head>
+<body class="antialiased p-4">
+
+    <div class="container mx-auto bg-white/50 rounded-3xl p-6 md:p-12 shadow-2xl ring-1 ring-black ring-opacity-5 my-8">
+        <!-- Hero Section: Problem + Promise -->
+        <section class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#3A5A40] leading-tight mb-6">
+                Ace Your AI PM Interview: <span class="text-[#656D4A]">Tailored Prep by AI.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-[#588157] max-w-3xl mx-auto mb-8">
+                 Landing an AI Product Manager role demands more than generic interview skills. You need to master complex ethical AI dilemmas, demonstrate deep technical understanding, and articulate your impact on data-driven products. Generic prep leaves you unprepared for these unique challenges.
+            </p>
+            <p class="text-xl md:text-2xl text-[#588157] max-w-3xl mx-auto mb-12">
+                 Our AI-powered bot provides **hyper-personalized mock interviews** that simulate real-world AI PM scenarios, crafts **custom study plans** to fill your exact knowledge gaps, and offers **actionable resume feedback** to highlight your true impact. Get ready to confidently secure your dream AI PM role.
+            </p>
+            <a href="#cta-section" class="btn-cta inline-block">
+                Get a Custom AI Mock Interview + Study Plan for $19
+            </a>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#3A5A40] mb-10">What Our Users Are Saying</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white/70 p-8 rounded-2xl shadow-lg border border-[#A3B18A]">
+                    <p class="text-lg italic text-[#333D29] mb-6">
+                        "The AI PM bot was a game-changer! It asked incredibly specific questions about ethical AI and data governance that I hadn't seen in any other prep material. The tailored feedback helped me articulate my experience perfectly. Landed my dream role!"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-[#D4D9C7] rounded-full flex items-center justify-center text-2xl text-[#656D4A] mr-4">👤</div>
+                        <div>
+                            <p class="font-semibold text-[#3A5A40]">Sarah J.</p>
+                            <p class="text-sm text-[#588157]">Senior AI Product Manager, Tech Giant</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/70 p-8 rounded-2xl shadow-lg border border-[#A3B18A]">
+                    <p class="text-lg italic text-[#333D29] mb-6">
+                        "I struggled to quantify my impact on my resume. This bot analyzed my bullet points and suggested concrete metrics and outcomes that instantly made my profile stronger. The personalized study plan also guided me exactly where I needed to focus. Highly recommend!"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-[#D4D9C7] rounded-full flex items-center justify-center text-2xl text-[#656D4A] mr-4">👩‍💻</div>
+                        <div>
+                            <p class="font-semibold text-[#3A5A40]">Michael T.</p>
+                            <p class="text-sm text-[#588157]">Aspiring AI Product Manager</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section id="cta-section" class="text-center bg-[#A3B18A]/30 p-8 md:p-12 rounded-2xl shadow-inner border border-[#A3B18A]">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#3A5A40] mb-6">Ready to Elevate Your AI PM Career?</h2>
+            <p class="text-xl md:text-2xl text-[#588157] max-w-2xl mx-auto mb-8">
+                Stop guessing and start preparing with precision. Get your personalized AI mock interview and custom study plan today.
+            </p>
+            <a href="#" class="btn-cta inline-block">
+                Get a Custom AI Mock Interview + Study Plan for $19
+            </a>
+        </section>
+    </div>
+
+</body>
+</html>
