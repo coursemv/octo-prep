@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PM Interview Prep Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* Warm Sand */
+            color: #333D29; /* Dark Olive */
+        }
+        .container {
+            max-width: 900px;
+        }
+        .form-input, .form-textarea {
+            @apply w-full p-3 border border-[#A3B18A] rounded-lg focus:ring-2 focus:ring-[#656D4A] focus:border-transparent transition-all duration-200 bg-white/70 text-[#333D29];
+        }
+        .btn-primary {
+            @apply bg-[#656D4A] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-[#3A5A40] transition-all duration-300;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #656D4A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Custom class for centering form field containers and increasing width */
+        .form-field-container {
+            @apply mx-auto max-w-xl; /* Increased max-width for better input space */
+        }
+    </style>
+</head>
+<body class="antialiased p-4">
+
+    <div class="container mx-auto bg-white/50 rounded-2xl p-6 md:p-10 shadow-lg ring-1 ring-black ring-opacity-5 my-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#3A5A40] mb-2">AI PM Interview Prep Bot</h1>
+            <p class="text-lg text-[#588157]">Enter candidate details to generate tailored interview questions and feedback.</p>
+            <p class="text-sm text-[#888] mt-2">
+                <span class="font-bold">Note:</span> This is a simulated bot for testing. For resume upload, please paste the text content of the resume below.
+            </p>
+        </header>
+
+        <form id="prepForm" class="space-y-6">
+            <div class="form-field-container">
+                <label for="candidateName" class="block text-sm font-medium text-[#333D29] mb-1">Candidate Name</label>
+                <input type="text" id="candidateName" class="form-input" placeholder="John Doe" required>
+            </div>
+            <div class="form-field-container">
+                <label for="jobTitle" class="block text-sm font-medium text-[#333D29] mb-1">Current Job Title</label>
+                <input type="text" id="jobTitle" class="form-input" placeholder="Software Engineer" required>
+            </div>
+            <div class="form-field-container">
+                <label for="interviewDate" class="block text-sm font-medium text-[#333D29] mb-1">Upcoming Interview Date</label>
+                <input type="date" id="interviewDate" class="form-input" required>
+            </div>
+            <div class="form-field-container">
+                <label for="resumeText" class="block text-sm font-medium text-[#333D29] mb-1">Resume Text (Paste content here)</label>
+                <textarea id="resumeText" rows="20" class="form-textarea" placeholder="Paste the full text of the candidate's resume here..." required></textarea>
+            </div>
+            <div class="form-field-container">
+                <label for="careerGoals" class="block text-sm font-medium text-[#333D29] mb-1">Career Goals related to this AI PM role</label>
+                <textarea id="careerGoals" rows="6" class="form-textarea" placeholder="e.g., Transition into AI product management, lead innovative AI initiatives..." required></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="generateBtn" class="btn-primary">
+                    Generate Interview Prep
+                </button>
+            </div>
+        </form>
+
+        <div id="results" class="mt-10 p-6 bg-white/80 rounded-xl shadow-inner hidden">
+            <h2 class="text-2xl font-bold text-[#3A5A40] mb-4 text-center">Generated Interview Prep</h2>
+            <div id="loadingIndicator" class="text-center text-[#588157] hidden">
+                <div class="loading-spinner"></div>
+                Generating questions and feedback...
+            </div>
+            <div id="prepContent" class="text-[#333D29] space-y-6">
+                <!-- AI generated content will be inserted here -->
+            </div>
+        </div>
+
+        <div id="errorMessage" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden">
+            <!-- Error messages will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // IMPORTANT: The 403 error (Forbidden) means your API key is invalid or lacks permissions.
+        // The 400 error (Bad Request) often means the input is too long or malformed.
+        // You MUST replace "YOUR_API_KEY_HERE" with a valid Google Cloud API key that has access to the Generative Language API.
+        // If you are getting "API key not valid", double-check these steps:
+        // 1. Go to Google Cloud Console (console.cloud.google.com).
+        // 2. Ensure you are in the correct Google Cloud Project (top dropdown).
+        // 3. Navigate to "APIs & Services" > "Credentials".
+        // 4. Create a new API Key if you don't have one, or use an existing one.
+        // 5. Click on your API Key and ensure "Generative Language API" is enabled under "API restrictions".
+        // 6. If you have "HTTP referrers (web sites)" selected under "Application restrictions",
+        //    add your GitHub Pages URL (e.g., https://your-username.github.io/* or https://your-username.github.io/your-repo-name/*)
+        //    to the list of allowed referrers.
+        const apiKey = "AIzaSyBPWYYxGuOQLNccNuSOThV3_BhMFIbUwWQ"; 
+        const form = document.getElementById('prepForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultsDiv = document.getElementById('results');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const prepContent = document.getElementById('prepContent');
+        const errorMessage = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultsDiv.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+
+            const candidateName = document.getElementById('candidateName').value;
+            const jobTitle = document.getElementById('jobTitle').value;
+            const interviewDate = document.getElementById('interviewDate').value;
+            const resumeText = document.getElementById('resumeText').value;
+            const careerGoals = document.getElementById('careerGoals').value;
+
+            const prompt = `Act as a hiring manager for an AI Product Manager role. I am reviewing a candidate's resume and career goals for an upcoming interview.
+
+Candidate Name: ${candidateName}
+Current Job Title: ${jobTitle}
+Upcoming Interview Date: ${interviewDate}
+Career Goals: ${careerGoals}
+
+Resume:
+${resumeText}
+
+Based on this resume and career goals, generate 5 realistic interview questions for an AI Product Manager role. For each question, also provide brief feedback on what a strong candidate's answer should demonstrate, specifically tailored to the provided resume/goals. Focus on questions that probe AI PM specific skills, product sense, technical understanding (relevant to AI), and leadership.
+
+Format your response clearly with numbered questions and feedback.`;
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                
+                // Log the payload being sent for debugging
+                console.log("Sending payload:", JSON.stringify(payload));
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorDetail = await response.text(); // Get the raw error response body
+                    console.error('API Error Response Body:', errorDetail); // Log the full error for debugging
+
+                    let userMessage = `Error: HTTP status ${response.status}.`;
+                    if (response.status === 400) {
+                        // Attempt to parse JSON error from API if available
+                        try {
+                            const errorJson = JSON.parse(errorDetail);
+                            if (errorJson.error && errorJson.error.message) {
+                                userMessage = `Request failed: ${errorJson.error.message}`;
+                            } else {
+                                userMessage = `Bad request (400). Please check your input length and content.`;
+                            }
+                        } catch (jsonParseError) {
+                            userMessage = `Bad request (400). Please check your input length and content. Raw error: ${errorDetail.substring(0, 100)}...`;
+                        }
+                    } else if (response.status === 403) {
+                        userMessage = `Forbidden (403). Please ensure your API key is correct and has access to the Generative Language API, and check API key restrictions (e.g., HTTP referrers).`;
+                    }
+                    throw new Error(userMessage); // Throw a more user-friendly error
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    prepContent.innerHTML = formatAIResponse(text);
+                    resultsDiv.classList.remove('hidden');
+                } else {
+                    throw new Error('Unexpected API response structure or no content.');
+                }
+            } catch (error) {
+                console.error('Error generating interview prep:', error);
+                errorMessage.textContent = error.message; // Display the specific error message
+                errorMessage.classList.remove('hidden');
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = 'Generate Interview Prep';
+            }
+        });
+
+        function formatAIResponse(text) {
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedText = formattedText.replace(/\n\n/g, '<br><br>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            return formattedText;
+        }
+    </script>
+</body>
+</html>
